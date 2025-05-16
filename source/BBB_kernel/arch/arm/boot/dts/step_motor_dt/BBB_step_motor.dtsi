@@ -1,0 +1,115 @@
+#include <dt-bindings/pinctrl/am33xx.h>
+
+/* Step motor node */
+/ {
+    stepmotor@0 {
+        compatible = "tecotec,stepmotor";
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        motor0: motor@0 {
+            reg = <0>;
+            pwms = <&ehrpwm1 0 500000 0>; // ehrpwm1a
+            pwm-names = "pwm";
+        };
+
+        motor1: motor@1 {
+            reg = <1>;
+            pwms = <&ehrpwm1 1 500000 0>; // ehrpwm1b
+            pwm-names = "pwm";
+        };
+
+        motor2: motor@2 {
+            reg = <2>;
+            pwms = <&ehrpwm2 0 500000 0>; // ehrpwm2a
+            pwm-names = "pwm";
+        };
+    };
+};
+
+/* Configuring the epwss module */
+&epwmss0 {
+    status = "okay";
+};
+
+&epwmss1 {
+    status = "okay";
+};
+
+&epwmss2 {
+    status = "okay";
+};
+
+/* Configuring the GPIO pinmux for stepper motor */
+&am33xx_pinmux {
+    ehrpwm1_pins_stepmotor: pinmux_ehrpwm1_pins_stepmotor {
+        pinctrl-single,pins = < 
+                    AM33XX_PADCONF(AM335X_PIN_GPMC_A2, PIN_OUTPUT, MUX_MODE6)   /* P9_14 */
+                    AM33XX_PADCONF(AM335X_PIN_GPMC_A3, PIN_OUTPUT, MUX_MODE6)   /* P9_16 */
+        >;
+    };
+
+    ehrpwm2_pins_stepmotor: pinmux_ehrpwm2_pins_stepmotor {
+        pinctrl-single,pins = < 
+                    AM33XX_PADCONF(AM335X_PIN_GPMC_AD8, PIN_OUTPUT, MUX_MODE4)  /* P8_19*/
+        >;
+    };
+
+    eqep0_pins_stepmotor: pinmux_eqep0_pins_stepmotor {
+        pinctrl-single,pins = < 
+                    AM33XX_PADCONF(AM335X_PIN_MCASP0_ACLKR, PIN_INPUT, MUX_MODE1)  /* P9_42 */
+        >;
+    };
+
+    eqep1_pins_stepmotor: pinmux_eqep1_pins_stepmotor {
+        pinctrl-single,pins = < 
+                    AM33XX_PADCONF(AM335X_PIN_LCD_DATA12, PIN_INPUT, MUX_MODE2)   /* P8_35 */
+        >;
+    };
+
+    eqep2_pins_stepmotor: pinmux_eqep2_pins_stepmotor {
+        pinctrl-single,pins = < 
+                    AM33XX_PADCONF(AM335X_PIN_LCD_DATA4, PIN_INPUT, MUX_MODE3)   /* P8_41 */
+        >;
+    };
+
+};
+
+/* Configuring the eHRPWM modules */
+&ehrpwm1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&ehrpwm1_pins_stepmotor>;
+};
+
+&ehrpwm2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&ehrpwm2_pins_stepmotor>;
+};
+
+&eqep0 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&eqep0_pins_stepmotor>;
+};
+
+&eqep1 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&eqep1_pins_stepmotor>;
+};
+
+&eqep2 {
+    status = "okay";
+    pinctrl-names = "default";
+    pinctrl-0 = <&eqep2_pins_stepmotor>;
+};
+
+
+&tda19988 {
+    status = "disabled";
+};
+
+
+
